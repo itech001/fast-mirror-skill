@@ -1,0 +1,23 @@
+{
+  "skill_name": "fast-mirror-skill",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I need to install a new Node.js project but npm install is extremely slow, it keeps timing out. Can you help me speed it up?",
+      "expected_output": "The skill should detect npm is being used, generate a mirror switch script for npm (and optionally yarn/pnpm), source the script to switch to a domestic mirror (like registry.npmmirror.com), and then run npm install. The output should explain what mirrors are being configured and provide the installation result.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I'm setting up a Python development environment and need to install pandas and numpy. pip install is taking forever. How can I make it faster?",
+      "expected_output": "The skill should detect pip is being used, generate a mirror switch script for pip with a domestic mirror (like Tsinghua TUNA), source the script to configure ~/.pip/pip.conf, and then run pip install pandas numpy. The output should explain the pip mirror configuration and show the installation progress.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "I just bought a new Mac and need to install Homebrew and some packages. Everything is downloading very slowly. Can you help configure fast mirrors?",
+      "expected_output": "The skill should detect Homebrew is being used on macOS, generate a mirror switch script for Homebrew with Tsinghua mirrors for brew.git, homebrew-core, and bottles, source the script to set the environment variables, and then help run brew install commands. The output should explain the Homebrew mirror configuration and provide installation results.",
+      "files": []
+    }
+  ]
+}
