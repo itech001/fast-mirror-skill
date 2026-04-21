@@ -2,6 +2,12 @@
 
 Automatically configure and switch to domestic mirror sources for package managers to speed up installations in China.
 
+## Demo
+
+![Fast Mirror Skill Demo](demo.jpg)
+
+**Try it online**: https://www.theaiera.cn/
+
 ## Supported Package Managers
 
 - **Node.js**: npm, yarn, pnpm
