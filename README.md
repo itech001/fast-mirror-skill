@@ -286,21 +286,6 @@ export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bott
 # 手动替换 URL 或使用 alias
 alias gclone='sed "s|https://github.com/|https://gitclone.com/github.com/|g"'
 ```
-}
-```
-
-### 3. 自动配置
-
-```bash
-# npm 配置示例
-npm config set registry https://registry.npmmirror.com
-
-# pip 配置示例
-pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
-
-# brew 配置示例
-export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles
-```
 
 ## 相关资源
 
