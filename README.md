@@ -44,7 +44,15 @@
 
 ## 安装
 
-要在您的 Claude 环境中安装此 skill，请使用 skill 管理系统。
+### 一键安装
+
+```bash
+npx skills add itech001/fast-mirror-skill
+```
+
+### 在线浏览
+
+[https://skillhub.cloud.tencent.com/skills/fast-mirror-skill](https://skillhub.cloud.tencent.com/skills/fast-mirror-skill)
 
 ## 镜像源列表
 
