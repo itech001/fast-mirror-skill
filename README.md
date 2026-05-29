@@ -6,7 +6,7 @@
 
 ![Fast Mirror Skill Demo](demo.jpg)
 
-**在线试用**: https://www.theaiera.cn/
+**在线试用**: https://www.theaiera.cn/mirrors
 
 > 注：如果链接无法访问，请查看项目文档或稍后重试。
 
@@ -35,7 +35,7 @@
 ## 手动配置镜像源
 
 您也可以在以下网站手动选择镜像源并生成配置脚本：
-**https://www.theaiera.cn/**
+**https://www.theaiera.cn/mirrors**
 
 该网站提供交互式界面，可以：
 - 选择特定的包管理器
@@ -290,7 +290,7 @@ alias gclone='sed "s|https://github.com/|https://gitclone.com/github.com/|g"'
 ## 相关资源
 
 - **GitHub 仓库**: [https://github.com/itech001/fast-mirror-skill](https://github.com/itech001/fast-mirror-skill)
-- **镜像配置工具**: [https://www.theaiera.cn/](https://www.theaiera.cn/)
+- **镜像配置工具**: [https://www.theaiera.cn/mirrors](https://www.theaiera.cn/mirrors)
 - **在线演示**: [demo.jpg](demo.jpg)
 
 ## 许可证

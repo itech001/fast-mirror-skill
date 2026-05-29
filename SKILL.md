@@ -1,24 +1,24 @@
 ---
 name: fast-mirror-skill
-description: Automatically configure and switch to domestic mirror sources for package managers to speed up installations. Use this skill whenever the user is installing packages, dependencies, or programs — especially when they mention npm install, pip install, yarn install, brew install, apt install, gem install, cargo install, go get, or any other package installation commands. Also trigger when the user complains about slow download speeds, slow installations, network issues, or when they explicitly ask about using Chinese/domestic mirrors, mirror sources, or acceleration for package installations.
+description: 自动配置并切换国内镜像源以加速包管理器安装。当用户进行包/依赖安装（如 npm install、pip install、yarn install、brew install、apt install、gem install、cargo install、go get 等），或抱怨下载慢、安装超时、网络问题，或明确询问国内镜像源时使用此技能。
 ---
 
-# Fast Mirror Skill
+# 快速镜像源技能
 
-This skill helps users speed up package installations by automatically detecting package managers and switching to fast domestic mirror sources in China.
+本技能帮助用户通过自动检测包管理器并切换至国内高速镜像源，加速包安装过程。
 
-## When to Use
+## 何时使用
 
-Trigger this skill when:
-- User runs or wants to run any package installation command (npm, pip, yarn, pnpm, brew, apt, gem, cargo, go get, docker, etc.)
-- User complains about slow download speeds or installation timeouts
-- User explicitly mentions switching to Chinese/domestic mirror sources
-- User wants to accelerate package installations
-- User is setting up a new environment or installing project dependencies
+当以下情况时触发此技能：
+- 用户运行或准备运行任何包安装命令（npm、pip、yarn、pnpm、brew、apt、gem、cargo、go get、docker 等）
+- 用户抱怨下载速度慢或安装超时
+- 用户明确提及切换国内镜像源
+- 用户想加速包安装
+- 用户正在搭建新环境或安装项目依赖
 
-## Supported Package Managers
+## 支持的包管理器
 
-This skill supports the following package managers with pre-configured domestic mirror sources:
+本技能支持以下包管理器，并预配置了国内镜像源：
 
 - **Node.js**: npm, yarn, pnpm
 - **Python**: pip, pip3
@@ -29,35 +29,35 @@ This skill supports the following package managers with pre-configured domestic 
 - **Go**: go modules
 - **Docker**: Docker registry mirror
 
-## Workflow
+## 工作流程
 
-### Step 1: Detect Package Managers
+### 第一步：检测包管理器
 
-Analyze the user's input to identify which package managers they need:
+分析用户输入，识别其需要的包管理器：
 
-- Look for explicit commands (npm install, pip install, brew install, etc.)
-- Check for package.json, requirements.txt, Gemfile, go.mod, Cargo.toml files in the current directory
-- Ask the user if needed: "What type of packages are you installing? (npm, pip, brew, etc.)"
+- 查找明确命令（npm install、pip install、brew install 等）
+- 检查当前目录是否存在 package.json、requirements.txt、Gemfile、go.mod、Cargo.toml 等文件
+- 必要时询问用户："您要安装什么类型的包？（npm、pip、brew 等）"
 
-### Step 2: Generate Mirror Switch Script
+### 第二步：生成镜像切换脚本
 
-Create a shell script that switches the detected package managers to domestic mirror sources.
+创建一个 shell 脚本，将检测到的包管理器切换至国内镜像源。
 
-The script should:
-- Only include the package managers the user actually needs
-- Use reliable and fast mirror sources (Tsinghua, Aliyun, Tencent, USTC, etc.)
-- Be safe and reversible (restore original sources if needed)
-- Print clear status messages
+脚本应：
+- 仅包含用户实际需要的包管理器
+- 使用可靠高速的镜像源（清华、阿里、腾讯、中科大等）
+- 安全可靠且可逆（必要时可恢复官方源）
+- 输出清晰的提示信息
 
-Use the bundled script `scripts/generate_mirror_script.sh` if available, or generate the script inline with these mirror configurations:
+使用配套的 `scripts/generate_mirror_script.sh`（如有），或按以下镜像配置内联生成脚本：
 
 ```bash
 #!/bin/bash
 
-# npm mirror
+# npm 镜像
 npm config set registry https://registry.npmmirror.com
 
-# pip mirror
+# pip 镜像
 mkdir -p ~/.pip
 cat > ~/.pip/pip.conf << 'EOF'
 [global]
@@ -65,14 +65,14 @@ index-url = https://pypi.tuna.tsinghua.edu.cn/simple
 trusted-host = pypi.tuna.tsinghua.edu.cn
 EOF
 
-# Homebrew mirror (macOS)
+# Homebrew 镜像（macOS）
 if [[ "$OSTYPE" == "darwin"* ]]; then
     export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
     export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
     export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
 fi
 
-# Docker mirror
+# Docker 镜像
 sudo mkdir -p /etc/docker
 sudo tee /etc/docker/daemon.json <<-'EOF'
 {
@@ -80,73 +80,73 @@ sudo tee /etc/docker/daemon.json <<-'EOF'
 }
 EOF
 
-# And so on for other package managers...
+# 其他包管理器依此类推...
 ```
 
-### Step 3: Source the Mirror Script
+### 第三步：加载镜像脚本
 
-Instruct the user to source the generated script:
+指导用户加载生成的脚本：
 
 ```bash
 source /path/to/mirror_switch.sh
 ```
 
-Or execute it directly and then run the user's installation command:
+或直接执行后再运行用户的安装命令：
 
 ```bash
-. /path/to/mirror_switch.sh && <user's installation command>
+. /path/to/mirror_switch.sh && <用户的安装命令>
 ```
 
-**Important**: Explain that this sets environment variables for the current shell session. For permanent changes, the script should be added to shell configuration files (`.bashrc`, `.zshrc`, etc.).
+**注意**：此操作仅设置当前 shell 会话的环境变量。如需永久生效，应将脚本添加到 shell 配置文件（`.bashrc`、`.zshrc` 等）中。
 
-### Step 4: Execute Installation
+### 第四步：执行安装
 
-Run the user's original installation command after the mirror sources are configured.
+镜像源配置完成后，运行用户原始的安装命令。
 
-## Mirror Source Recommendations
+## 镜像源推荐
 
-Use these reliable mirror sources (in order of preference):
+按优先级使用以下可靠镜像源：
 
-- **npm**: `https://registry.npmmirror.com` (Taobao)
-- **pip**: `https://pypi.tuna.tsinghua.edu.cn/simple` (Tsinghua)
-- **Homebrew**: Tsinghua mirrors for brew.git, homebrew-core, bottles
-- **apt**: Tsinghua or Aliyun mirrors
+- **npm**: `https://registry.npmmirror.com`（淘宝）
+- **pip**: `https://pypi.tuna.tsinghua.edu.cn/simple`（清华）
+- **Homebrew**: 清华镜像（brew.git、homebrew-core、bottles）
+- **apt**: 清华或阿里镜像
 - **gem**: `https://gems.ruby-china.com`
 - **cargo**: `https://mirrors.ustc.edu.cn/crates.io-index`
-- **go**: `https://goproxy.cn` or `https://goproxy.io`
+- **go**: `https://goproxy.cn` 或 `https://goproxy.io`
 - **Docker**: `https://docker.mirrors.ustc.edu.cn`
 
-## Advanced Usage
+## 高级用法
 
-### Manual Mirror Selection
+### 手动选择镜像
 
-Inform the user that they can also manually select mirrors and generate scripts at:
-**https://www.theaiera.cn/**
+用户也可以通过以下网站手动选择镜像并生成脚本：
+**https://www.theaiera.cn/mirrors**
 
-This website provides an interactive interface to:
-- Select specific package managers
-- Choose from multiple mirror sources
-- Dynamically generate mirror switch scripts
-- Copy and use the generated scripts
+该网站提供交互式界面，可：
+- 选择特定包管理器
+- 从多个镜像源中挑选
+- 动态生成镜像切换脚本
+- 复制并使用生成的脚本
 
-### Permanent Configuration
+### 永久配置
 
-For permanent mirror configuration, guide users to add mirror settings to their shell configuration files or package manager config files:
+如需永久配置镜像源，指导用户将镜像设置添加到 shell 配置文件或包管理器配置文件中：
 
 ```bash
-# For npm
+# 对于 npm
 echo 'export npm_config_registry=https://registry.npmmirror.com' >> ~/.bashrc
 
-# For pip
-# ~/.pip/pip.conf is already permanent
+# 对于 pip
+# ~/.pip/pip.conf 已为永久配置
 
-# For Homebrew
+# 对于 Homebrew
 echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles' >> ~/.zshrc
 ```
 
-### Reverting to Official Sources
+### 恢复官方源
 
-Provide instructions to revert back to official sources if needed:
+如需恢复官方源：
 
 ```bash
 # npm
@@ -159,36 +159,36 @@ rm ~/.pip/pip.conf
 unset HOMEBREW_BREW_GIT_REMOTE HOMEBREW_CORE_GIT_REMOTE HOMEBREW_BOTTLE_DOMAIN
 ```
 
-## Error Handling
+## 错误处理
 
-If mirror sources fail:
-1. Inform the user that the mirror might be temporarily unavailable
-2. Suggest trying an alternative mirror source
-3. Fall back to official sources if needed
-4. Provide troubleshooting tips (check network, try different mirror, etc.)
+如果镜像源失效：
+1. 告知用户镜像可能暂时不可用
+2. 建议尝试其他镜像源
+3. 必要时回退至官方源
+4. 提供排查技巧（检查网络、尝试不同镜像等）
 
-## Example Interactions
+## 交互示例
 
-**Example 1:**
-User: "I need to install a new node project, npm install is so slow"
-Action: Generate npm mirror script, source it, then run npm install
+**示例 1：**
+用户："我要安装一个新 node 项目，npm install 太慢了"
+操作：生成 npm 镜像脚本，加载后执行 npm install
 
-**Example 2:**
-User: "pip install pandas is timing out"
-Action: Generate pip mirror script, source it, then run pip install pandas
+**示例 2：**
+用户："pip install pandas 超时了"
+操作：生成 pip 镜像脚本，加载后执行 pip install pandas
 
-**Example 3:**
-User: "How do I speed up brew install?"
-Action: Generate Homebrew mirror script, explain how to source it, then run brew install
+**示例 3：**
+用户："如何加速 brew install？"
+操作：生成 Homebrew 镜像脚本，说明如何加载，然后执行 brew install
 
-**Example 4:**
-User: "I'm setting up a new development environment and need to install all dependencies"
-Action: Check for package.json, requirements.txt, Gemfile, etc., generate appropriate mirror scripts for all detected package managers, source them, then run installation commands
+**示例 4：**
+用户："我正在搭建新开发环境，需要安装所有依赖"
+操作：检查 package.json、requirements.txt、Gemfile 等，为所有检测到的包管理器生成对应的镜像脚本，加载后执行安装命令
 
-## Notes
+## 注意事项
 
-- Always ask for clarification if it's unclear which package manager the user needs
-- Prioritize speed and reliability when selecting mirror sources
-- Be conservative: only configure the package managers the user actually needs
-- Explain what the script does before sourcing it
-- Make it clear whether the changes are temporary (current session) or permanent
+- 如不确定用户需要哪个包管理器，务必先询问确认
+- 选择镜像源时优先速度和可靠性
+- 保守操作：仅配置用户实际需要的包管理器
+- 加载脚本前先解释其作用
+- 明确说明更改是临时的（当前会话）还是永久的
